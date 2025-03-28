@@ -40,16 +40,14 @@ from .connector import (JsonRpcConnector, JsonRpcsConnector, XmlRpcConnector,
                         XmlRpcsConnector)
 
 
-def get_connector(hostname=None, protocol="xmlrpc", port="auto"):
+def get_connector(hostname: str, protocol="xmlrpc", port=8069):
     """
     A shortcut method to easily create a connector to a remote server using XMLRPC.
 
     :param hostname: The hostname to the remote server.
     :param protocol: The name of the protocol, must be "xmlrpc", "xmlrpcs", "jsonrpc" or "jsonrpcs".
-    :param port: The number of the port. Defaults to auto.
+    :param port: The number of the port. Defaults to 8069.
     """
-    if port == "auto":
-        port = 8069
     if protocol == "xmlrpc":
         return XmlRpcConnector(hostname, port)
     elif protocol == "xmlrpcs":
@@ -63,9 +61,9 @@ def get_connector(hostname=None, protocol="xmlrpc", port="auto"):
 
 
 def get_connection(
-    hostname=None,
+    hostname: str,
     protocol="xmlrpc",
-    port="auto",
+    port=8069,
     database=None,
     login=None,
     password=None,
@@ -76,7 +74,7 @@ def get_connection(
 
     :param hostname: The hostname to the remote server.
     :param protocol: The name of the protocol, must be "xmlrpc", "xmlrpcs", "jsonrpc" or "jsonrpcs".
-    :param port: The number of the port. Defaults to auto.
+    :param port: The number of the port. Defaults to 8069.
     :param connector: A valid Connector instance to send messages to the remote server.
     :param database: The name of the database to work on.
     :param login: The login of the user.
