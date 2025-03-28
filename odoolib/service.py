@@ -1,3 +1,4 @@
+import asyncio
 import logging
 
 
@@ -21,12 +22,23 @@ class Service(object):
         """
         self._logger.debug("method: %r", method)
 
-        def proxy(*args):
+        async def proxy(*args):
             """
+            Dual-purpose proxy that can handle both sync and async calls.
             :param args: A list of values for the method
             """
             self._logger.debug("args: %r", args)
-            result = self.connector.send(self.service_name, method, *args)
+
+            if asyncio.iscoroutinefunction(asyncio.current_task):
+                # called when await was used -> await service.some_method(123)
+                self._logger.debug("using async send")
+                result = await self.connector.async_send(
+                    self.service_name, method, *args
+                )
+            else:
+                self._logger.debug("using send")
+                result = self.connector.send(self.service_name, method, *args)
+
             self._logger.debug("result: %r", result)
             return result
 
