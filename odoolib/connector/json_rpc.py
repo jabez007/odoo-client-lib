@@ -1,6 +1,7 @@
 import json
 import logging
 import random
+from typing import Optional
 
 import requests
 
@@ -22,7 +23,7 @@ class JsonRpcConnector(Connector):
 
     PROTOCOL = "jsonrpc"
 
-    def __init__(self, hostname: str, port=8069):
+    def __init__(self, hostname: str, port=8069, version: Optional[str] = "2"):
         """
         Initialize by specifying the hostname and the port.
         :param hostname: The hostname of the computer holding the instance of Odoo.
@@ -30,7 +31,11 @@ class JsonRpcConnector(Connector):
         """
         super().__init__()
         self._logger = logging.getLogger(f"{self._logger.name}.jsonrpc")
-        self.url: str = "http://%s:%d/jsonrpc" % (hostname, port)
+        self.url: str = (
+            "http://%s:%d/jsonrpc" % (hostname, port)
+            if version is None
+            else "http://%s:%d/jsonrpc/%s" % (hostname, port, version)
+        )
 
     def send(self, service_name: str, method: str, *args):
         return self._json_rpc(

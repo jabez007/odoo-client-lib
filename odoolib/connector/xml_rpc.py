@@ -1,4 +1,5 @@
 import logging
+from typing import Optional
 from xmlrpc.client import ServerProxy
 
 from ._connector import Connector
@@ -11,7 +12,7 @@ class XmlRpcConnector(Connector):
 
     PROTOCOL = "xmlrpc"
 
-    def __init__(self, hostname: str, port=8069):
+    def __init__(self, hostname: str, port=8069, version: Optional[str] = "2"):
         """
         Initialize by specifying the hostname and the port.
         :param hostname: The hostname of the computer holding the instance of Odoo.
@@ -19,7 +20,11 @@ class XmlRpcConnector(Connector):
         """
         super().__init__()
         self._logger = logging.getLogger(f"{self._logger.name}.xmlrpc")
-        self.url = "http://%s:%d/xmlrpc" % (hostname, port)
+        self.url = (
+            "http://%s:%d/xmlrpc" % (hostname, port)
+            if version is None
+            else "http://%s:%d/xmlrpc/%s" % (hostname, port, version)
+        )
 
     def send(self, service_name: str, method: str, *args):
         url = "%s/%s" % (self.url, service_name)
