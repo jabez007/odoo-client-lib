@@ -35,5 +35,5 @@ class XmlRpcConnector(Connector):
 
     def send(self, service_name: str, method: str, *args):
         url = "%s/%s" % (self.url, service_name)
-        service = ServerProxy(url, transport=self._transport, verbose=True)
+        service = ServerProxy(url, transport=self._transport)
         return getattr(service, method)(*args)

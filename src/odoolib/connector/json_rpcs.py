@@ -11,7 +11,7 @@ class JsonRpcsConnector(JsonRpcConnector):
 
     PROTOCOL = "jsonrpcs"
 
-    def __init__(self, hostname: str, port=8069, version: Optional[str] = "2"):
+    def __init__(self, hostname: str, port=8069, version="2.0"):
         """
         Initialize by specifying the hostname and the port.
         :param hostname: The hostname of the computer holding the instance of Odoo.
@@ -20,9 +20,4 @@ class JsonRpcsConnector(JsonRpcConnector):
         super(JsonRpcsConnector, self).__init__(hostname, port, version)
         self._logger = logging.getLogger(
             f"{str.join('.', self._logger.name.split('.')[:-1])}.jsonrpcs"
-        )
-        self.url = (
-            "https://%s:%d/jsonrpc" % (hostname, port)
-            if version is None
-            else "https://%s:%d/jsonrpc/%s" % (hostname, port, version)
         )
