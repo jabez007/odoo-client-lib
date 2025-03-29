@@ -25,7 +25,7 @@ jobs:
 
       - name: Start up containers
         run: |
-          docker compose -f ./test_containers/compose.yaml up --detach --wait --wait-timeout 600
+          docker compose -f ./test_containers/compose.yaml up --detach --wait --wait-timeout 60
 
       - name: Setup Python
         uses: actions/setup-python@v4
