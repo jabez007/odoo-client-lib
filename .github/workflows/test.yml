@@ -14,8 +14,8 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_USER: odoo
-          POSTGRES_PASSWORD: odoo
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: a
           POSTGRES_DB: test
         # Set health checks to wait until postgres has started
         options: >-
@@ -30,6 +30,8 @@ jobs:
         image: odoo
         env:
           HOST: postgres
+          USER: admin
+          PASSWORD: a
         ports:
           - 8069:8069
 
