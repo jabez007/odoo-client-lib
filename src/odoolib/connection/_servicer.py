@@ -43,6 +43,21 @@ class Servicer(object):
 
         self.user_id = user_id
 
+    def _check_logged_in(self, force=True) -> bool:
+        """
+        Checks if this Connection was already validated previously.
+
+        :param force: Force to re-check even if this Connection was already validated previously.
+        Default to True.
+        """
+        if self.user_id and not force:
+            return True
+
+        if not self.database or not self.login or self.password is None:
+            raise AuthenticationError("Credentials not provided")
+
+        return False
+
     def check_login(self, force=True):
         """
         Checks that the login information is valid. Throws an AuthenticationError if the
@@ -51,11 +66,8 @@ class Servicer(object):
         :param force: Force to re-check even if this Connection was already validated previously.
         Default to True.
         """
-        if self.user_id and not force:
+        if self._check_logged_in(force):
             return
-
-        if not self.database or not self.login or self.password is None:
-            raise AuthenticationError("Credentials not provided")
 
         # TODO use authenticate instead of login
         self.user_id = self.get_service("common").login(
@@ -63,7 +75,26 @@ class Servicer(object):
         )
         if not self.user_id:
             raise AuthenticationError("Authentication failure")
-        self._logger.debug("Authenticated with user id %s", self.user_id)
+        self._logger.debug("Authenticated (sync) with user id %s", self.user_id)
+
+    async def async_check_login(self, force=True):
+        """
+        Checks that the login information is valid. Throws an AuthenticationError if the
+        authentication fails.
+
+        :param force: Force to re-check even if this Connection was already validated previously.
+        Default to True.
+        """
+        if self._check_logged_in(force):
+            return
+
+        # TODO use authenticate instead of login
+        self.user_id = await self.get_service("common").login.async_(
+            self.database, self.login, self.password
+        )
+        if not self.user_id:
+            raise AuthenticationError("Authentication failure")
+        self._logger.debug("Authenticated (async) with user id %s", self.user_id)
 
     def get_service(self, service_name: str) -> Service:
         """
