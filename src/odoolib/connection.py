@@ -1,7 +1,9 @@
 import logging
+from typing import Optional
 
 from .connector._connector import Connector
 from .model import Model
+from .service import Service
 
 
 class AuthenticationError(Exception):
@@ -21,10 +23,10 @@ class Connection(object):
     def __init__(
         self,
         connector: Connector,
-        database=None,
-        login=None,
-        password=None,
-        user_id=None,
+        database: Optional[str] = None,
+        login: Optional[str] = None,
+        password: Optional[str] = None,
+        user_id: Optional[int] = None,
     ):
         """
         Initialize with login information. The login information is facultative to allow specifying
@@ -42,7 +44,13 @@ class Connection(object):
         self.set_login_info(database, login, password, user_id)
         self.user_context = None
 
-    def set_login_info(self, database, login, password, user_id=None):
+    def set_login_info(
+        self,
+        database: Optional[str],
+        login: Optional[str],
+        password: Optional[str],
+        user_id: Optional[int] = None,
+    ):
         """
         Set login information after the initialisation of this object.
 
@@ -87,7 +95,7 @@ class Connection(object):
             self.user_context = self.get_model("res.users").context_get()
         return self.user_context
 
-    def get_model(self, model_name):
+    def get_model(self, model_name: str) -> Model:
         """
         Returns a Model instance to allow easy remote manipulation of an Odoo model.
 
@@ -95,7 +103,7 @@ class Connection(object):
         """
         return Model(self, model_name)
 
-    def get_service(self, service_name):
+    def get_service(self, service_name: str) -> Service:
         """
         Returns a Service instance to allow easy manipulation of one of the services offered by the remote server.
         Please note this Connection instance does not need to have valid authentication information since authentication

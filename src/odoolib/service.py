@@ -1,12 +1,14 @@
 import logging
 
+from .connector._sender import Sender
+
 
 class Service(object):
     """
     A class to execute RPC calls on a specific service of the remote server.
     """
 
-    def __init__(self, connector, service_name: str):
+    def __init__(self, connector: Sender, service_name: str):
         """
         :param connector: A valid Connector instance.
         :param service_name: The name of the service on the remote server.
