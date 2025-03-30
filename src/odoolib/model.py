@@ -1,5 +1,7 @@
 import logging
 
+from .connection._servicer import Servicer
+
 
 class Model(object):
     """
@@ -7,7 +9,7 @@ class Model(object):
     An instance of this class depends on a Connection instance with valid authentication information.
     """
 
-    def __init__(self, connection, model_name):
+    def __init__(self, connection: Servicer, model_name: str):
         """
         :param connection: A valid Connection instance with correct authentication information.
         :param model_name: The name of the model.

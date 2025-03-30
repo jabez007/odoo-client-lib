@@ -1,24 +1,12 @@
 import logging
 from typing import Optional
 
-from .connector._connector import Connector
-from .model import Model
-from .service import Service
+from ..connector._connector import Connector
+from ..service import Service
+from .authentication_error import AuthenticationError
 
 
-class AuthenticationError(Exception):
-    """
-    An error thrown when an authentication to an Odoo server failed.
-    """
-
-    pass
-
-
-class Connection(object):
-    """
-    A class to represent a connection with authentication to an Odoo Server.
-    It also provides utility methods to interact with the server more easily.
-    """
+class Servicer(object):
 
     def __init__(
         self,
@@ -28,21 +16,11 @@ class Connection(object):
         password: Optional[str] = None,
         user_id: Optional[int] = None,
     ):
-        """
-        Initialize with login information. The login information is facultative to allow specifying
-        it after the initialization of this object.
-
-        :param connector: A valid Connector instance to send messages to the remote server.
-        :param database: The name of the database to work on.
-        :param login: The login of the user.
-        :param password: The password of the user.
-        :param user_id: The user id is a number identifying the user. This is only useful if you
-        already know it, in most cases you don't need to specify it.
-        """
+        self._logger = logging.getLogger(
+            f"{str.join('.', __name__.split('.')[:-1])}.{connector.PROTOCOL}"
+        )
         self.connector = connector
-        self._logger = logging.getLogger(f"{__name__}.{connector.PROTOCOL}")
         self.set_login_info(database, login, password, user_id)
-        self.user_context = None
 
     def set_login_info(
         self,
@@ -86,22 +64,6 @@ class Connection(object):
         if not self.user_id:
             raise AuthenticationError("Authentication failure")
         self._logger.debug("Authenticated with user id %s", self.user_id)
-
-    def get_user_context(self):
-        """
-        Query the default context of the user.
-        """
-        if not self.user_context:
-            self.user_context = self.get_model("res.users").context_get()
-        return self.user_context
-
-    def get_model(self, model_name: str) -> Model:
-        """
-        Returns a Model instance to allow easy remote manipulation of an Odoo model.
-
-        :param model_name: The name of the model.
-        """
-        return Model(self, model_name)
 
     def get_service(self, service_name: str) -> Service:
         """
