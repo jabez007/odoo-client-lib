@@ -54,6 +54,7 @@ class TestSequenceFunctions(unittest.TestCase):
         )
 
     def _get_protocols(self):
+        """Returns available protocols."""
         return ["xmlrpc", "jsonrpc"]
 
     def test_simple(self):

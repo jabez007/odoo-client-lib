@@ -41,6 +41,14 @@ class Connection(Servicer):
             self.user_context = self.get_model("res.users").context_get()
         return self.user_context
 
+    async def async_get_user_context(self):
+        """
+        Query the default context of the user.
+        """
+        if not self.user_context:
+            self.user_context = await self.get_model("res.users").context_get.async_()
+        return self.user_context
+
     def get_model(self, model_name: str) -> Model:
         """
         Returns a Model instance to allow easy remote manipulation of an Odoo model.
