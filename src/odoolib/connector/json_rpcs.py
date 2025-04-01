@@ -30,8 +30,6 @@
 #
 ##############################################################################
 
-import logging
-
 from .json_rpc import JsonRpcConnector
 
 
@@ -49,6 +47,4 @@ class JsonRpcsConnector(JsonRpcConnector):
         :param port: The port used by the Odoo instance for JsonRPC (default to 8069).
         """
         super(JsonRpcsConnector, self).__init__(hostname, port, version)
-        self._logger = logging.getLogger(
-            f"{str.join('.', self._logger.name.split('.')[:-1])}.jsonrpcs"
-        )
+        self.url: str = "https://%s:%d/jsonrpc" % (hostname, port)

@@ -31,7 +31,6 @@
 ##############################################################################
 
 import json
-import logging
 import random
 
 import requests
@@ -60,8 +59,7 @@ class JsonRpcConnector(Connector):
         :param hostname: The hostname of the computer holding the instance of Odoo.
         :param port: The port used by the Odoo instance for JsonRPC (default to 8069).
         """
-        super().__init__()
-        self._logger = logging.getLogger(f"{self._logger.name}.jsonrpc")
+        super(JsonRpcConnector, self).__init__()
         self.url: str = "http://%s:%d/jsonrpc" % (hostname, port)
         self.version = version
 
