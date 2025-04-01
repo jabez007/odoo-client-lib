@@ -30,7 +30,6 @@
 #
 ##############################################################################
 
-import logging
 from typing import Optional
 from xmlrpc.client import ServerProxy, Transport
 
@@ -56,8 +55,7 @@ class XmlRpcConnector(Connector):
         :param hostname: The hostname of the computer holding the instance of Odoo.
         :param port: The port used by the Odoo instance for XMLRPC (default to 8069).
         """
-        super().__init__()
-        self._logger = logging.getLogger(f"{self._logger.name}.xmlrpc")
+        super(XmlRpcConnector, self).__init__()
         self.url = (
             "http://%s:%d/xmlrpc" % (hostname, port)
             if version is None

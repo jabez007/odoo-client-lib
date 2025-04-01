@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-# Copyright (C) Stephane Wirtel
-# Copyright (C) 2011 Nicolas Vanhoren
-# Copyright (C) 2011 OpenERP s.a. (<http://openerp.com>)
-# Copyright (C) 2018 Odoo s.a. (<http://odoo.com>).
 # Copyright (C) 2025 Jimmy McCann
 # All rights reserved.
 #
@@ -30,31 +26,43 @@
 #
 ##############################################################################
 
-import logging
-from typing import Optional
+import unittest
+from unittest.mock import MagicMock, patch
 
-from ..service import Service
-from ._sender import Sender
+from odoolib import XmlRpcConnector
 
 
-class Connector(Sender):
-    """
-    The base abstract class representing a connection to an Odoo Server.
-    """
+class TestXmlRpcConnector(unittest.TestCase):
+    def setUp(self):
+        self.hostname = "localhost"
+        self.port = 8069
+        self.version = "2"
+        self.connector = XmlRpcConnector(self.hostname)
 
-    PROTOCOL: Optional[str] = None
-
-    def __init__(self):
-        self._logger = logging.getLogger(
-            f"{str.join('.', __name__.split('.')[:-1])}"
-            + (f".{self.PROTOCOL}" if self.PROTOCOL is not None else "")
+    def test_initialization(self):
+        self.assertEqual(
+            self.connector.url,
+            f"http://{self.hostname}:{self.port}/xmlrpc/{self.version}",
         )
-        self.url: Optional[str] = None
+        self.assertEqual(self.connector._logger.name, "odoolib.connector.xmlrpc")
+        self.assertIsNone(self.connector._transport)
 
-    def get_service(self, service_name: str) -> Service:
-        """
-        Returns a Service instance to allow easy manipulation of one of the services offered by the remote server.
+    @patch("odoolib.connector.xml_rpc.ServerProxy")
+    def test_send(self, mock_server_proxy):
+        mock_service = MagicMock()
+        mock_method = MagicMock(return_value="mock_response")
+        mock_service.some_method = mock_method
+        mock_server_proxy.return_value = mock_service
 
-        :param service_name: The name of the service.
-        """
-        return Service(self, service_name)
+        response = self.connector.send("common", "some_method", "arg1", "arg2")
+
+        mock_server_proxy.assert_called_once_with(
+            f"http://{self.hostname}:{self.port}/xmlrpc/{self.version}/common",
+            transport=None,
+        )
+        mock_method.assert_called_once_with("arg1", "arg2")
+        self.assertEqual(response, "mock_response")
+
+
+if __name__ == "__main__":
+    unittest.main()

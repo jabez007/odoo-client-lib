@@ -27,15 +27,13 @@
 ##############################################################################
 
 import asyncio
-from typing import Any, Optional
+from typing import Any
 
 
 class Sender(object):
     """
     The base abstract class for sending RPC requests
     """
-
-    PROTOCOL: Optional[str] = None
 
     def send(self, service_name: str, method: str, *args) -> Any:
         """

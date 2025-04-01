@@ -30,7 +30,6 @@
 #
 ##############################################################################
 
-import logging
 from typing import Optional
 from xmlrpc.client import SafeTransport
 
@@ -52,9 +51,6 @@ class XmlRpcsConnector(XmlRpcConnector):
         transport: Optional[SafeTransport] = None,
     ):
         super(XmlRpcsConnector, self).__init__(hostname, port, version, transport)
-        self._logger = logging.getLogger(
-            f"{str.join('.', self._logger.name.split('.')[:-1])}.xmlrpcs"
-        )
         self.url = (
             "https://%s:%d/xmlrpc" % (hostname, port)
             if version is None
