@@ -5,6 +5,7 @@
 # Copyright (C) 2011 Nicolas Vanhoren
 # Copyright (C) 2011 OpenERP s.a. (<http://openerp.com>)
 # Copyright (C) 2018 Odoo s.a. (<http://odoo.com>).
+# Copyright (C) 2025 Jimmy McCann
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -33,22 +34,27 @@ import os.path
 from distutils.core import setup
 
 setup(
-    name="odoo-client-lib",
-    version="1.2.1",
-    description="Odoo Client Library allows to easily interact with Odoo in Python.",
-    author="Nicolas Vanhoren",
-    author_email="",
-    url="",
+    name="mccann-hub_odoo-client-lib",
+    version="2.0.0",
+    description="Extended Odoo Client Library allows to easily interact with Odoo in Python.",
+    author="Nicolas Vanhoren, Jimmy McCann",
+    author_email="jabez007@users.noreply.github.com",
+    url="https://github.com/jabez007/odoo-client-lib",
     packages=["odoolib"],
     install_requires=[
         "requests",
         "asyncio",
     ],
-    long_description="See the home page for any information: https://github.com/odoo/odoo-client-lib .",
+    long_description="Extended Odoo Client Library with additional features. See original project home page for additional information: https://github.com/odoo/odoo-client-lib .",
     keywords="openerp library com communication rpc xml-rpc net-rpc xmlrpc python client lib web service",
     license="BSD",
     classifiers=[
         "License :: OSI Approved :: BSD License",
         "Programming Language :: Python",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
     ],
 )
