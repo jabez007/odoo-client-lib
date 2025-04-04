@@ -28,6 +28,7 @@
 
 import unittest
 from unittest.mock import MagicMock
+
 from odoolib.service import Service
 
 
@@ -42,7 +43,9 @@ class TestService(unittest.TestCase):
 
         result = self.service.some_method("arg1", 42)
 
-        self.mock_sender.send.assert_called_once_with("common", "some_method", "arg1", 42)
+        self.mock_sender.send.assert_called_once_with(
+            "common", "some_method", "arg1", 42
+        )
         self.assertEqual(result, "success")
 
     def test_sync_method_caching_and_multiple_calls(self):
