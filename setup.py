@@ -34,12 +34,14 @@ from setuptools import find_namespace_packages, setup
 
 setup(
     name="mccann_hub-odoo_client_lib",
-    version="2.0.0",
+    version="2.0.1",
     description="Extended Odoo Client Library allows to easily interact with Odoo in Python.",
     author="Nicolas Vanhoren, Jimmy McCann",
     author_email="jabez007@users.noreply.github.com",
     url="https://github.com/jabez007/odoo-client-lib",
-    packages=find_namespace_packages(where='src', include=["mccann_hub.odoolib", "mccann_hub.odoolib.*"]),
+    packages=find_namespace_packages(
+        where="src", include=["mccann_hub.odoolib", "mccann_hub.odoolib.*"]
+    ),
     install_requires=[
         "requests",
         "asyncio",

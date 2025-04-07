@@ -8,7 +8,7 @@ include = ["mccann_hub.odoolib", "mccann_hub.odoolib.*"]
 
 [project]
 name = "mccann_hub-odoo_client_lib"
-version = "2.0.0"
+version = "2.0.1"
 description = "Extended Odoo Client Library with additional functionality"
 readme = "README.rst"
 authors = [
