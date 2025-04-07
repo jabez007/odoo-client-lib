@@ -29,7 +29,7 @@
 import unittest
 from unittest.mock import MagicMock
 
-from odoolib.model import Model
+from mccann_hub.odoolib.model import Model
 
 
 class TestModel(unittest.TestCase):
@@ -40,6 +40,11 @@ class TestModel(unittest.TestCase):
         self.mock_connection.password = "pass"
         self.mock_connection.get_service.return_value.execute_kw = MagicMock()
         self.model = Model(self.mock_connection, "res.partner")
+
+    def test_initialization(self):
+        self.assertEqual(
+            self.model._logger.name, "mccann_hub.odoolib.model.res.partner"
+        )
 
     def test_proxy_method_call(self):
         self.mock_connection.get_service.return_value.execute_kw.return_value = [

@@ -30,17 +30,16 @@
 #
 ##############################################################################
 
-import os.path
-from distutils.core import setup
+from setuptools import find_namespace_packages, setup
 
 setup(
-    name="mccann-hub_odoo-client-lib",
+    name="mccann_hub-odoo_client_lib",
     version="2.0.0",
     description="Extended Odoo Client Library allows to easily interact with Odoo in Python.",
     author="Nicolas Vanhoren, Jimmy McCann",
     author_email="jabez007@users.noreply.github.com",
     url="https://github.com/jabez007/odoo-client-lib",
-    packages=["odoolib"],
+    packages=find_namespace_packages(where='src', include=["mccann_hub.*"]),
     install_requires=[
         "requests",
         "asyncio",
@@ -57,4 +56,5 @@ setup(
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
     ],
+    python_requires=">=3.9",
 )

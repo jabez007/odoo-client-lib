@@ -37,7 +37,7 @@ with a database named 'test' and a user 'admin' with password 'a'.
 
 import unittest
 
-import odoolib
+import mccann_hub.odoolib as odoolib
 
 
 class TestSequenceFunctions(unittest.TestCase):

@@ -29,7 +29,7 @@
 import unittest
 from unittest.mock import MagicMock
 
-from odoolib.service import Service
+from mccann_hub.odoolib.service import Service
 
 
 class TestService(unittest.TestCase):
@@ -37,6 +37,9 @@ class TestService(unittest.TestCase):
         self.mock_sender = MagicMock()
         self.service_name = "common"
         self.service = Service(self.mock_sender, self.service_name)
+
+    def test_initialization(self):
+        self.assertEqual(self.service._logger.name, "mccann_hub.odoolib.service.common")
 
     def test_sync_method_call(self):
         self.mock_sender.send.return_value = "success"

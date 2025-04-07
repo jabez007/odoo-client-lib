@@ -29,7 +29,7 @@
 import unittest
 from unittest.mock import MagicMock, patch
 
-from odoolib import XmlRpcsConnector
+from mccann_hub.odoolib import XmlRpcsConnector
 
 
 class TestXmlRpcsConnector(unittest.TestCase):
@@ -44,10 +44,12 @@ class TestXmlRpcsConnector(unittest.TestCase):
             self.connector.url,
             f"https://{self.hostname}:{self.port}/xmlrpc/{self.version}",
         )
-        self.assertEqual(self.connector._logger.name, "odoolib.connector.xmlrpcs")
+        self.assertEqual(
+            self.connector._logger.name, "mccann_hub.odoolib.connector.xmlrpcs"
+        )
         self.assertIsNone(self.connector._transport)
 
-    @patch("odoolib.connector.xml_rpc.ServerProxy")
+    @patch("mccann_hub.odoolib.connector.xml_rpc.ServerProxy")
     def test_send(self, mock_server_proxy):
         mock_service = MagicMock()
         mock_method = MagicMock(return_value="mock_response")

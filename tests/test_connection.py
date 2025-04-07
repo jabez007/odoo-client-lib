@@ -29,9 +29,9 @@
 import unittest
 from unittest.mock import MagicMock
 
-from odoolib.connection import Connection
-from odoolib.connector._connector import Connector
-from odoolib.model import Model
+from mccann_hub.odoolib.connection import Connection
+from mccann_hub.odoolib.connector._connector import Connector
+from mccann_hub.odoolib.model import Model
 
 
 class TestConnection(unittest.TestCase):

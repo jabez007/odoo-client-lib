@@ -28,7 +28,7 @@
 
 import unittest
 
-import odoolib
+import mccann_hub.odoolib as odoolib
 
 
 class TestAsyncSequenceFunctions(unittest.IsolatedAsyncioTestCase):

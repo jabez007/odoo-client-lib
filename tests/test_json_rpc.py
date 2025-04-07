@@ -30,7 +30,7 @@ import json
 import unittest
 from unittest.mock import MagicMock, patch
 
-from odoolib.connector import JsonRpcConnector, JsonRpcException
+from mccann_hub.odoolib.connector import JsonRpcConnector, JsonRpcException
 
 
 class TestJsonRpcConnector(unittest.TestCase):
@@ -45,9 +45,11 @@ class TestJsonRpcConnector(unittest.TestCase):
             self.connector.url, f"http://{self.hostname}:{self.port}/jsonrpc"
         )
         self.assertEqual(self.connector.version, self.version)
-        self.assertEqual(self.connector._logger.name, "odoolib.connector.jsonrpc")
+        self.assertEqual(
+            self.connector._logger.name, "mccann_hub.odoolib.connector.jsonrpc"
+        )
 
-    @patch("odoolib.connector.json_rpc.requests.post")
+    @patch("mccann_hub.odoolib.connector.json_rpc.requests.post")
     def test_send_success(self, mock_post):
         mock_response = MagicMock()
         mock_response.json.return_value = {"result": "mock_response"}
@@ -74,7 +76,7 @@ class TestJsonRpcConnector(unittest.TestCase):
 
         self.assertEqual(response, "mock_response")
 
-    @patch("odoolib.connector.json_rpc.requests.post")
+    @patch("mccann_hub.odoolib.connector.json_rpc.requests.post")
     def test_send_error(self, mock_post):
         mock_response = MagicMock()
         mock_response.json.return_value = {"error": "mock_error"}
