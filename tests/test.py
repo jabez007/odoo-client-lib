@@ -70,7 +70,10 @@ class TestSequenceFunctions(unittest.TestCase):
         for protocol in self._get_protocols():
             connection = self._conn(protocol)
 
-            connection.get_user_context()
+            context = connection.get_user_context()
+            self.assertIsInstance(context, dict)
+            self.assertIn("lang", context)
+            self.assertIn("tz", context)
 
     def test_search_count(self):
         for protocol in self._get_protocols():

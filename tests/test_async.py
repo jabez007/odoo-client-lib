@@ -62,7 +62,10 @@ class TestAsyncSequenceFunctions(unittest.IsolatedAsyncioTestCase):
         for protocol in self._get_protocols():
             connection = self._conn(protocol)
 
-            await connection.async_get_user_context()
+            context = await connection.async_get_user_context()
+            self.assertIsInstance(context, dict)
+            self.assertIn("lang", context)
+            self.assertIn("tz", context)
 
     async def test_search_count_async(self):
         """Tests async search and count."""

@@ -64,6 +64,15 @@ class XmlRpcConnector(Connector):
         self._transport = transport
 
     def send(self, service_name: str, method: str, *args):
+        """
+        Send a request to the specified service and method with the given arguments.
+
+        :param service_name: The name of the service to call (e.g., 'common', 'object', etc.)
+        :param method: The method name to call on the service
+        :param args: Additional arguments to pass to the method
+        :return: The result of the method call
+        :raises: xmlrpc.client.Fault if the remote call fails
+        """
         url = "%s/%s" % (self.url, service_name)
         service = ServerProxy(url, transport=self._transport)
         return getattr(service, method)(*args)
