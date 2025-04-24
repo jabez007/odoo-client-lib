@@ -8,7 +8,7 @@ include = ["mccann_hub.odoolib", "mccann_hub.odoolib.*"]
 
 [project]
 name = "mccann_hub-odoo_client_lib"
-version = "2.0.1"
+version = "2.0.2"
 description = "Extended Odoo Client Library with additional functionality"
 readme = "README.rst"
 authors = [
@@ -20,14 +20,13 @@ classifiers = [
     "License :: OSI Approved :: BSD License",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
 ]
-keywords = ["openerp", "library", "communication", "rpc", "xml-rpc", "net-rpc", "xmlrpc", "python", "client", "lib", "web service"]
-requires-python = ">=3.9"
+keywords = ["openerp", "odoo", "library", "communication", "rpc", "xml-rpc", "net-rpc", "xmlrpc", "python", "client", "lib", "web service"]
+requires-python = ">=3.10"
 dependencies = [
     "requests",
     "asyncio",

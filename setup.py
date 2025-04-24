@@ -34,7 +34,7 @@ from setuptools import find_namespace_packages, setup
 
 setup(
     name="mccann_hub-odoo_client_lib",
-    version="2.0.1",
+    version="2.0.2",
     description="Extended Odoo Client Library allows to easily interact with Odoo in Python.",
     author="Nicolas Vanhoren, Jimmy McCann",
     author_email="jabez007@users.noreply.github.com",
@@ -47,16 +47,15 @@ setup(
         "asyncio",
     ],
     long_description="Extended Odoo Client Library with additional features. See original project home page for additional information: https://github.com/odoo/odoo-client-lib .",
-    keywords="openerp library com communication rpc xml-rpc net-rpc xmlrpc python client lib web service",
+    keywords="openerp odoo library com communication rpc xml-rpc net-rpc xmlrpc python client lib web service",
     license="BSD",
     classifiers=[
         "License :: OSI Approved :: BSD License",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
     ],
-    python_requires=">=3.9",
+    python_requires=">=3.10",
 )
