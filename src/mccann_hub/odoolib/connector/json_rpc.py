@@ -75,14 +75,23 @@ class JsonRpcConnector(Connector):
             "params": params,
             "id": random.randint(0, 1000000000),
         }
-        result_req = requests.post(
-            self.url,
-            data=json.dumps(data),
-            headers={
-                "Content-Type": "application/json",
-            },
-        )
+
+        try:
+            result_req = requests.post(
+                self.url,
+                data=json.dumps(data),
+                headers={
+                    "Content-Type": "application/json",
+                },
+                # timeout=10 # ← sensible default
+            )
+            result_req.raise_for_status()
+        except requests.RequestException as err:  # network / HTTP errors
+            raise JsonRpcException({"code": -32000, "message": str(err)}) from err
+
         result = result_req.json()
+
         if result.get("error", None):
             raise JsonRpcException(result["error"])
+
         return result.get("result", False)

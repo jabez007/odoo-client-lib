@@ -49,17 +49,17 @@ def get_connector(hostname: str, protocol="xmlrpc", port=8069):
     :param protocol: The name of the protocol, must be "xmlrpc", "xmlrpcs", "jsonrpc" or "jsonrpcs".
     :param port: The number of the port. Defaults to 8069.
     """
-    if protocol == "xmlrpc":
-        return XmlRpcConnector(hostname, port)
-    elif protocol == "xmlrpcs":
-        return XmlRpcsConnector(hostname, port)
-    if protocol == "jsonrpc":
-        return JsonRpcConnector(hostname, port)
-    elif protocol == "jsonrpcs":
-        return JsonRpcsConnector(hostname, port)
-    else:
-        raise ValueError("You must choose xmlrpc, xmlrpcs, jsonrpc or jsonrpcs")
-
+    match protocol:
+        case "xmlrpc":
+            return XmlRpcConnector(hostname, port)
+        case "xmlrpcs":
+            return XmlRpcsConnector(hostname, port)
+        case "jsonrpc":
+            return JsonRpcConnector(hostname, port)
+        case "jsonrpcs":
+            return JsonRpcsConnector(hostname, port)
+        case _:
+            raise ValueError("You must choose xmlrpc, xmlrpcs, jsonrpc or jsonrpcs")
 
 def get_connection(
     hostname: str,
