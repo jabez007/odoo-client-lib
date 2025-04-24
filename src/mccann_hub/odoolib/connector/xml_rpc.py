@@ -30,32 +30,49 @@
 #
 ##############################################################################
 
-from setuptools import find_namespace_packages, setup
+from typing import Optional
+from xmlrpc.client import ServerProxy, Transport
 
-setup(
-    name="mccann_hub-odoo_client_lib",
-    version="2.0.2",
-    description="Extended Odoo Client Library allows to easily interact with Odoo in Python.",
-    author="Nicolas Vanhoren, Jimmy McCann",
-    author_email="jabez007@users.noreply.github.com",
-    url="https://github.com/jabez007/odoo-client-lib",
-    packages=find_namespace_packages(
-        where="src", include=["mccann_hub.odoolib", "mccann_hub.odoolib.*"]
-    ),
-    install_requires=[
-        "requests",
-        "asyncio",
-    ],
-    long_description="Extended Odoo Client Library with additional features. See original project home page for additional information: https://github.com/odoo/odoo-client-lib .",
-    keywords="openerp odoo library com communication rpc xml-rpc net-rpc xmlrpc python client lib web service",
-    license="BSD",
-    classifiers=[
-        "License :: OSI Approved :: BSD License",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.11",
-        "Programming Language :: Python :: 3.12",
-        "Programming Language :: Python :: 3.13",
-    ],
-    python_requires=">=3.10",
-)
+from ._connector import Connector
+
+
+class XmlRpcConnector(Connector):
+    """
+    A type of connector that uses the XMLRPC protocol.
+    """
+
+    PROTOCOL = "xmlrpc"
+
+    def __init__(
+        self,
+        hostname: str,
+        port=8069,
+        version: Optional[str] = "2",
+        transport: Optional[Transport] = None,
+    ):
+        """
+        Initialize by specifying the hostname and the port.
+        :param hostname: The hostname of the computer holding the instance of Odoo.
+        :param port: The port used by the Odoo instance for XMLRPC (default to 8069).
+        """
+        super(XmlRpcConnector, self).__init__()
+        self.url = (
+            "http://%s:%d/xmlrpc" % (hostname, port)
+            if version is None
+            else "http://%s:%d/xmlrpc/%s" % (hostname, port, version)
+        )
+        self._transport = transport
+
+    def send(self, service_name: str, method: str, *args):
+        """
+        Send a request to the specified service and method with the given arguments.
+
+        :param service_name: The name of the service to call (e.g., 'common', 'object', etc.)
+        :param method: The method name to call on the service
+        :param args: Additional arguments to pass to the method
+        :return: The result of the method call
+        :raises: xmlrpc.client.Fault if the remote call fails
+        """
+        url = "%s/%s" % (self.url, service_name)
+        service = ServerProxy(url, transport=self._transport)
+        return getattr(service, method)(*args)

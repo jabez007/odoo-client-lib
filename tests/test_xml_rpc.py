@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-# Copyright (C) Stephane Wirtel
-# Copyright (C) 2011 Nicolas Vanhoren
-# Copyright (C) 2011 OpenERP s.a. (<http://openerp.com>)
-# Copyright (C) 2018 Odoo s.a. (<http://odoo.com>).
 # Copyright (C) 2025 Jimmy McCann
 # All rights reserved.
 #
@@ -30,32 +26,45 @@
 #
 ##############################################################################
 
-from setuptools import find_namespace_packages, setup
+import unittest
+from unittest.mock import MagicMock, patch
 
-setup(
-    name="mccann_hub-odoo_client_lib",
-    version="2.0.2",
-    description="Extended Odoo Client Library allows to easily interact with Odoo in Python.",
-    author="Nicolas Vanhoren, Jimmy McCann",
-    author_email="jabez007@users.noreply.github.com",
-    url="https://github.com/jabez007/odoo-client-lib",
-    packages=find_namespace_packages(
-        where="src", include=["mccann_hub.odoolib", "mccann_hub.odoolib.*"]
-    ),
-    install_requires=[
-        "requests",
-        "asyncio",
-    ],
-    long_description="Extended Odoo Client Library with additional features. See original project home page for additional information: https://github.com/odoo/odoo-client-lib .",
-    keywords="openerp odoo library com communication rpc xml-rpc net-rpc xmlrpc python client lib web service",
-    license="BSD",
-    classifiers=[
-        "License :: OSI Approved :: BSD License",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.11",
-        "Programming Language :: Python :: 3.12",
-        "Programming Language :: Python :: 3.13",
-    ],
-    python_requires=">=3.10",
-)
+from mccann_hub.odoolib import XmlRpcConnector
+
+
+class TestXmlRpcConnector(unittest.TestCase):
+    def setUp(self):
+        self.hostname = "localhost"
+        self.port = 8069
+        self.version = "2"
+        self.connector = XmlRpcConnector(self.hostname)
+
+    def test_initialization(self):
+        self.assertEqual(
+            self.connector.url,
+            f"http://{self.hostname}:{self.port}/xmlrpc/{self.version}",
+        )
+        self.assertEqual(
+            self.connector._logger.name, "mccann_hub.odoolib.connector.xmlrpc"
+        )
+        self.assertIsNone(self.connector._transport)
+
+    @patch("mccann_hub.odoolib.connector.xml_rpc.ServerProxy")
+    def test_send(self, mock_server_proxy):
+        mock_service = MagicMock()
+        mock_method = MagicMock(return_value="mock_response")
+        mock_service.some_method = mock_method
+        mock_server_proxy.return_value = mock_service
+
+        response = self.connector.send("common", "some_method", "arg1", "arg2")
+
+        mock_server_proxy.assert_called_once_with(
+            f"http://{self.hostname}:{self.port}/xmlrpc/{self.version}/common",
+            transport=None,
+        )
+        mock_method.assert_called_once_with("arg1", "arg2")
+        self.assertEqual(response, "mock_response")
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -13,11 +13,11 @@ Guide
 
 First install the library: ::
 
-    pip install odoo-client-lib
+    pip install mccann_hub-odoo_client_lib
 
 Now copy-paste the following script describing a simple interaction with an Odoo server: ::
 
-    import odoolib
+    import mccann_hub.odoolib as odoolib
 
     connection = odoolib.get_connection(hostname="localhost", database="my_db", \
         login="my_user", password="xxx")
@@ -61,6 +61,13 @@ Here are also some considerations about coding using the Odoo Client Library:
   transactional.
 - The browse() method can not be used. That method returns a dynamic proxy that lazy loads the rows' data from
   the database. That behavior is not implemented in the Odoo Client Library.
+
+Testing
+-------
+
+There is a Docker compose file in the `test_containers` directory that will stand up a local instance of Odoo: ::
+
+    docker compose -f ./test_containers/compose.yaml up 
 
 Compatibility
 -------------

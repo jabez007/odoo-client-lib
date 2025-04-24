@@ -6,16 +6,16 @@
 # Copyright (C) 2011 OpenERP s.a. (<http://openerp.com>)
 # Copyright (C) 2018 Odoo s.a. (<http://odoo.com>).
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met: 
-# 
+# modification, are permitted provided that the following conditions are met:
+#
 # 1. Redistributions of source code must retain the above copyright notice, this
-# list of conditions and the following disclaimer. 
+# list of conditions and the following disclaimer.
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 # this list of conditions and the following disclaimer in the documentation
-# and/or other materials provided with the distribution. 
-# 
+# and/or other materials provided with the distribution.
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -26,7 +26,7 @@
 # ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-# 
+#
 ##############################################################################
 
 import datetime
@@ -35,19 +35,22 @@ DEFAULT_SERVER_DATE_FORMAT = "%Y-%m-%d"
 DEFAULT_SERVER_TIME_FORMAT = "%H:%M:%S"
 DEFAULT_SERVER_DATETIME_FORMAT = "%s %s" % (
     DEFAULT_SERVER_DATE_FORMAT,
-    DEFAULT_SERVER_TIME_FORMAT)
+    DEFAULT_SERVER_TIME_FORMAT,
+)
+
 
 def str_to_datetime(str):
     """
     Converts a string to a datetime object using Odoo's
     datetime string format (exemple: '2011-12-01 15:12:35').
-    
+
     No timezone information is added, the datetime is a naive instance, but
     according to Odoo 9.0 specification the timezone is always UTC.
     """
     if not str:
         return str
     return datetime.datetime.strptime(str.split(".")[0], DEFAULT_SERVER_DATETIME_FORMAT)
+
 
 def str_to_date(str):
     """
@@ -58,6 +61,7 @@ def str_to_date(str):
         return str
     return datetime.datetime.strptime(str, DEFAULT_SERVER_DATE_FORMAT).date()
 
+
 def str_to_time(str):
     """
     Converts a string to a time object using Odoo's
@@ -65,18 +69,22 @@ def str_to_time(str):
     """
     if not str:
         return str
-    return datetime.datetime.strptime(str.split(".")[0], DEFAULT_SERVER_TIME_FORMAT).time()
+    return datetime.datetime.strptime(
+        str.split(".")[0], DEFAULT_SERVER_TIME_FORMAT
+    ).time()
+
 
 def datetime_to_str(obj):
     """
     Converts a datetime object to a string using Odoo's
     datetime string format (exemple: '2011-12-01 15:12:35').
-    
+
     The datetime instance should not have an attached timezone and be in UTC.
     """
     if not obj:
         return False
     return obj.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+
 
 def date_to_str(obj):
     """
@@ -86,6 +94,7 @@ def date_to_str(obj):
     if not obj:
         return False
     return obj.strftime(DEFAULT_SERVER_DATE_FORMAT)
+
 
 def time_to_str(obj):
     """

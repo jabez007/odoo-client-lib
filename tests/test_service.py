@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-# Copyright (C) Stephane Wirtel
-# Copyright (C) 2011 Nicolas Vanhoren
-# Copyright (C) 2011 OpenERP s.a. (<http://openerp.com>)
-# Copyright (C) 2018 Odoo s.a. (<http://odoo.com>).
 # Copyright (C) 2025 Jimmy McCann
 # All rights reserved.
 #
@@ -30,32 +26,46 @@
 #
 ##############################################################################
 
-from setuptools import find_namespace_packages, setup
+import unittest
+from unittest.mock import MagicMock
 
-setup(
-    name="mccann_hub-odoo_client_lib",
-    version="2.0.2",
-    description="Extended Odoo Client Library allows to easily interact with Odoo in Python.",
-    author="Nicolas Vanhoren, Jimmy McCann",
-    author_email="jabez007@users.noreply.github.com",
-    url="https://github.com/jabez007/odoo-client-lib",
-    packages=find_namespace_packages(
-        where="src", include=["mccann_hub.odoolib", "mccann_hub.odoolib.*"]
-    ),
-    install_requires=[
-        "requests",
-        "asyncio",
-    ],
-    long_description="Extended Odoo Client Library with additional features. See original project home page for additional information: https://github.com/odoo/odoo-client-lib .",
-    keywords="openerp odoo library com communication rpc xml-rpc net-rpc xmlrpc python client lib web service",
-    license="BSD",
-    classifiers=[
-        "License :: OSI Approved :: BSD License",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.11",
-        "Programming Language :: Python :: 3.12",
-        "Programming Language :: Python :: 3.13",
-    ],
-    python_requires=">=3.10",
-)
+from mccann_hub.odoolib.service import Service
+
+
+class TestService(unittest.TestCase):
+    def setUp(self):
+        self.mock_sender = MagicMock()
+        self.service_name = "common"
+        self.service = Service(self.mock_sender, self.service_name)
+
+    def test_initialization(self):
+        self.assertEqual(self.service._logger.name, "mccann_hub.odoolib.service.common")
+
+    def test_sync_method_call(self):
+        self.mock_sender.send.return_value = "success"
+
+        result = self.service.some_method("arg1", 42)
+
+        self.mock_sender.send.assert_called_once_with(
+            "common", "some_method", "arg1", 42
+        )
+        self.assertEqual(result, "success")
+
+    def test_sync_method_caching_and_multiple_calls(self):
+        self.mock_sender.send.side_effect = ["res1", "res2"]
+
+        result1 = self.service.foo(1)
+        result2 = self.service.foo(2)
+
+        self.assertEqual(result1, "res1")
+        self.assertEqual(result2, "res2")
+        self.assertEqual(self.mock_sender.send.call_count, 2)
+
+    def test_method_name_reflection(self):
+        proxy = self.service.do_something
+        self.assertTrue(callable(proxy))
+        self.assertTrue(hasattr(proxy, "async_"))
+
+
+if __name__ == "__main__":
+    unittest.main()
